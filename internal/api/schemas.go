@@ -1,8 +1,14 @@
 package api
 
-type WeaponJSON struct {
+type WeaponsJSON struct {
 	Success bool     `json:"success"`
+	Count   float64  `json:"count"`
 	Data    []Weapon `json:"data"`
+}
+
+type TalismansJSON struct {
+	Success bool       `json:"success"`
+	Data    []Talisman `json:"data"`
 }
 
 type AttackDetail struct {
@@ -36,4 +42,12 @@ type Weapon struct {
 	Defence            []DefenceDetail     `json:"defence"`
 	RequiredAttributes []RequiredAttribute `json:"requiredAttributes"`
 	ScalesWith         []ScaleDetail       `json:"scalesWith"`
+}
+
+type Talisman struct {
+	Id          string `json:"id"`
+	Name        string `json:"name"`
+	Image       string `json:"image"`
+	Description string `json:"description"`
+	Effects     string `json:"effect"`
 }
