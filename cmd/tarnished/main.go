@@ -1,18 +1,22 @@
 package main
 
 import (
-	"Path-of-the-Tarnished/internal/api"
+	"bufio"
+	"fmt"
+	"os"
 )
 
 func main() {
-	// Weapons := api.RetrieveWeapons()
-	Talismans := api.RetrieveTalismans()
+	var rune_level int
+	var weapon_of_choice string
 
-	// for _, currentWeapon := range Weapons {
-	// 	api.PrettyPrintWeapon(currentWeapon)
-	// }
+	fmt.Print("Enter current rune level: ")
+	fmt.Scan(&rune_level)
 
-	for _, currentTalisman := range Talismans {
-		api.PrettyPrintTalisman(currentTalisman)
-	}
+	fmt.Print("Enter weapon of choice: ")
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Scan()
+	weapon_of_choice = scanner.Text()
+
+	fmt.Println("You desire to use the", weapon_of_choice, "with a rune level of", rune_level, "...")
 }
