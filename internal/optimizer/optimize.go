@@ -2,13 +2,17 @@ package optimizer
 
 import (
 	"Path-of-the-Tarnished/internal/coregame"
+	"log"
 )
 
-func GetOptimizedStats(weapon coregame.Weapon, class coregame.Class, runeLvl int) coregame.Attributes {
+func GetOptimizedStats(weaponName string, className string, runeLvl uint16) (coregame.Attributes, error) {
 
-	var currAttrs coregame.Attributes
+	character, err := coregame.NewCharacter(className)
 
+	if err != nil {
+		log.Fatalf("couldn't create character: %v", err)
+	}
 	// will do optimized brute force loop here
 
-	return currAttrs
+	return character.Attrs, nil
 }

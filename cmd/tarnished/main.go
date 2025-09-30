@@ -20,8 +20,7 @@ func PrintStats(attrs coregame.Attributes) {
 }
 
 func main() {
-	var runeLevel int
-	var weaponStr string
+	var runeLevel uint16
 
 	fmt.Print("Enter current rune level: ")
 	fmt.Scan(&runeLevel)
@@ -29,15 +28,22 @@ func main() {
 	fmt.Print("Enter weapon of choice: ")
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
-	weaponStr = scanner.Text()
+	weaponName := scanner.Text()
 
-	fmt.Println("You desire to use the", weaponStr, "with a rune level of", runeLevel, "...")
+	fmt.Print("Enter base class: ")
+	scanner.Scan()
+	className := scanner.Text()
+
+	fmt.Println("You desire to use the", weaponName, "with a rune level of", runeLevel, "and the class", className, "...")
 
 	//conv str to weapon
-	var weapon coregame.Weapon
-	var class coregame.Class
 
-	optimalStats := optimizer.GetOptimizedStats(weapon, class, runeLevel)
+	optimalStats, err := optimizer.GetOptimizedStats(weaponName, className, runeLevel)
+
+	if err != nil {
+		fmt.Println("could not get optimize stats")
+		return
+	}
 
 	//printing optimal stats
 	PrintStats(optimalStats)
