@@ -87,6 +87,7 @@ func NewCharacter(className string) (*Character, error) {
 	runeLvl := baseClassRuneLevel[className]
 	baseClass := baseClassType[className]
 
+	//creating new Character instance
 	character := &Character{RuneLvl: runeLvl, Attrs: attrs, BaseClass: baseClass}
 
 	return character, nil

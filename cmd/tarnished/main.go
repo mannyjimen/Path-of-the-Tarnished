@@ -7,6 +7,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func PrintStats(attrs coregame.Attributes) {
@@ -22,20 +23,31 @@ func PrintStats(attrs coregame.Attributes) {
 
 var AllWeapons = api.RetrieveWeapons()
 
-func main() {
-	var runeLevel uint16
-
-	fmt.Print("Enter current rune level: ")
-	fmt.Scan(&runeLevel)
-
+func GetWeaponName() string {
 	fmt.Print("Enter weapon of choice: ")
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
-	weaponName := scanner.Text()
 
+	return strings.ToLower(scanner.Text())
+}
+
+func GetRuneLevel() uint16 {
+	var runeLevel uint16
+	fmt.Print("Enter current rune level: ")
+	fmt.Scan(&runeLevel)
+	return runeLevel
+}
+
+func GetBaseClass() string {
 	fmt.Print("Enter base class: ")
+	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
-	className := scanner.Text()
+	return scanner.Text()
+}
+
+func main() {
+	runeLevel := GetRuneLevel()
+	weaponName := GetWeaponName()
 
 	//checking for existence of weapon
 	_, ok := AllWeapons[weaponName]
@@ -44,7 +56,7 @@ func main() {
 		return
 	}
 
-	fmt.Println("Weapon exists!")
+	className := GetBaseClass()
 
 	optimalStats, err := optimizer.GetOptimizedStats(weaponName, className, runeLevel)
 

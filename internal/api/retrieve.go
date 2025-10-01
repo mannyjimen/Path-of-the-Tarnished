@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 func PrettyPrintWeapon(currWeapon Weapon) {
@@ -72,7 +73,7 @@ func RetrieveWeapons() map[string]*Weapon {
 		currentRangeOfWeapons := retrieveWeaponPage(current_url + strconv.Itoa(currentPage))
 
 		for _, currentWeapon := range currentRangeOfWeapons {
-			AllWeapons[currentWeapon.Name] = &currentWeapon
+			AllWeapons[strings.ToLower(currentWeapon.Name)] = &currentWeapon
 		}
 	}
 
