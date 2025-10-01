@@ -12,6 +12,7 @@ func GetOptimizedStats(weaponName string, className string, runeLvl uint16) (cor
 	if err != nil {
 		log.Fatalf("couldn't create character: %v", err)
 	}
+	// runesToUse := runeLvl - character.RuneLvl
 	// will do optimized brute force loop here
 
 	return character.Attrs, nil

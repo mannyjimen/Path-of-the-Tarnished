@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Path-of-the-Tarnished/internal/api"
 	"Path-of-the-Tarnished/internal/coregame"
 	"Path-of-the-Tarnished/internal/optimizer"
 	"bufio"
@@ -19,6 +20,8 @@ func PrintStats(attrs coregame.Attributes) {
 	fmt.Println("Arc -", attrs.Arc)
 }
 
+var AllWeapons = api.RetrieveWeapons()
+
 func main() {
 	var runeLevel uint16
 
@@ -34,14 +37,19 @@ func main() {
 	scanner.Scan()
 	className := scanner.Text()
 
-	fmt.Println("You desire to use the", weaponName, "with a rune level of", runeLevel, "and the class", className, "...")
+	//checking for existence of weapon
+	_, ok := AllWeapons[weaponName]
+	if !ok {
+		fmt.Println("Weapon does not exist")
+		return
+	}
 
-	//conv str to weapon
+	fmt.Println("Weapon exists!")
 
 	optimalStats, err := optimizer.GetOptimizedStats(weaponName, className, runeLevel)
 
 	if err != nil {
-		fmt.Println("could not get optimize stats")
+		fmt.Println("Could not optimize stats")
 		return
 	}
 

@@ -13,10 +13,10 @@ func PrettyPrintWeapon(currWeapon Weapon) {
 	fmt.Println("Description:", currWeapon.Description)
 }
 
-func PrettyPrintTalisman(currTalisman Talisman) {
-	fmt.Println("Name:", currTalisman.Name)
-	fmt.Println("Description:", currTalisman.Description)
-}
+// func PrettyPrintTalisman(currTalisman Talisman) {
+// 	fmt.Println("Name:", currTalisman.Name)
+// 	fmt.Println("Description:", currTalisman.Description)
+// }
 
 func retrieveWeaponPage(url string) []Weapon {
 	resp, err := http.Get(url)
@@ -40,47 +40,50 @@ func retrieveWeaponPage(url string) []Weapon {
 	return AllWeaponsJSON.Data
 }
 
-func retrieveTalismanPage(url string) []Talisman {
-	resp, err := http.Get(url)
-	if err != nil {
-		fmt.Println("failed to GET")
-		return nil
-	}
+// func retrieveTalismanPage(url string) []Talisman {
+// 	resp, err := http.Get(url)
+// 	if err != nil {
+// 		fmt.Println("failed to GET")
+// 		return nil
+// 	}
 
-	defer resp.Body.Close()
+// 	defer resp.Body.Close()
 
-	byteBody, err := io.ReadAll(resp.Body)
+// 	byteBody, err := io.ReadAll(resp.Body)
 
-	if err != nil {
-		fmt.Println("failed to read talisman page")
-		return nil
-	}
+// 	if err != nil {
+// 		fmt.Println("failed to read talisman page")
+// 		return nil
+// 	}
 
-	var AllTalismansJSON TalismansJSON
-	json.Unmarshal(byteBody, &AllTalismansJSON)
+// 	var AllTalismansJSON TalismansJSON
+// 	json.Unmarshal(byteBody, &AllTalismansJSON)
 
-	return AllTalismansJSON.Data
-}
+// 	return AllTalismansJSON.Data
+// }
 
-func RetrieveWeapons() []Weapon {
+func RetrieveWeapons() map[string]*Weapon {
 
-	var AllWeapons []Weapon
+	var AllWeapons = make(map[string]*Weapon)
 	current_url := "https://eldenring.fanapis.com/api/weapons?limit=30&page="
 
 	//fix - what if more weapons are added to API (im hard coding num pages)
 	for currentPage := range 11 {
 		currentRangeOfWeapons := retrieveWeaponPage(current_url + strconv.Itoa(currentPage))
-		AllWeapons = append(AllWeapons, currentRangeOfWeapons...)
+
+		for _, currentWeapon := range currentRangeOfWeapons {
+			AllWeapons[currentWeapon.Name] = &currentWeapon
+		}
 	}
 
 	return AllWeapons
 }
 
-func RetrieveTalismans() []Talisman {
-	var AllTalismans []Talisman
-	current_url := "https://eldenring.fanapis.com/api/talismans?limit=88"
+// func RetrieveTalismans() []Talisman {
+// 	var AllTalismans []Talisman
+// 	current_url := "https://eldenring.fanapis.com/api/talismans?limit=88"
 
-	AllTalismans = retrieveTalismanPage(current_url)
+// 	AllTalismans = retrieveTalismanPage(current_url)
 
-	return AllTalismans
-}
+// 	return AllTalismans
+// }
