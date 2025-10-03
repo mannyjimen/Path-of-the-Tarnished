@@ -7,6 +7,5 @@ var normalWeaponRatio = []float32{
 }
 
 func GetBaseDamage(zeroDamage float32, reinforcedLevel int) float32 {
-
 	return float32(zeroDamage) * normalWeaponRatio[reinforcedLevel]
 }
