@@ -14,6 +14,8 @@ func PrettyPrintWeapon(currWeapon Weapon) {
 	fmt.Println("Description:", currWeapon.Description)
 }
 
+var AllWeapons = RetrieveWeapons()
+
 // func PrettyPrintTalisman(currTalisman Talisman) {
 // 	fmt.Println("Name:", currTalisman.Name)
 // 	fmt.Println("Description:", currTalisman.Description)

@@ -21,8 +21,6 @@ func PrintStats(attrs coregame.Attributes) {
 	fmt.Println("Arc -", attrs.Arc)
 }
 
-var AllWeapons = api.RetrieveWeapons()
-
 func GetWeaponName() string {
 	fmt.Print("Enter weapon of choice: ")
 	scanner := bufio.NewScanner(os.Stdin)
@@ -50,7 +48,7 @@ func main() {
 	weaponName := GetWeaponName()
 
 	//checking for existence of weapon
-	_, ok := AllWeapons[weaponName]
+	_, ok := api.AllWeapons[weaponName]
 	if !ok {
 		fmt.Println("Weapon does not exist")
 		return
