@@ -6,6 +6,15 @@ var normalWeaponRatio = []float32{
 	2.007, 2.065, 2.123, 2.182, 2.249, 2.298, 2.357, 2.447,
 }
 
+var scalingRatio = map[byte]float32{
+	'E': 0.225,
+	'D': 0.425,
+	'C': 0.75,
+	'B': 1.15,
+	'A': 1.575,
+	'S': 1.75,
+}
+
 func GetBaseDamage(zeroDamage float32, reinforcedLevel int) float32 {
 	return float32(zeroDamage) * normalWeaponRatio[reinforcedLevel]
 }

@@ -26,14 +26,14 @@ type Character struct {
 }
 
 type Attributes struct {
-	Vgr uint8
-	Mnd uint8
-	End uint8
-	Str uint8
-	Dex uint8
-	Int uint8
-	Fth uint8
-	Arc uint8
+	Vgr uint16
+	Mnd uint16
+	End uint16
+	Str uint16
+	Dex uint16
+	Int uint16
+	Fth uint16
+	Arc uint16
 }
 
 // short var `:=` can only be used inside functions
@@ -74,6 +74,16 @@ var baseClassType = map[string]Class{
 	"Vagabond":   Vagabond,
 	"Prophet":    Prophet,
 	"Samurai":    Samurai,
+}
+
+// first method (pointer receiver too!)
+func (character *Character) SetAttr(attr string, attrLevel uint16) {
+}
+
+func (character *Character) AddToAttr(attr string, levelsToAdd uint16) {
+}
+
+func (character *Character) SubFromAttr(attr string, levelsToAdd uint16) {
 }
 
 // constructor function (using error!)

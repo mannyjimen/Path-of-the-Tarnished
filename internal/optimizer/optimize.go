@@ -1,44 +1,44 @@
 package optimizer
 
 import (
-	"Path-of-the-Tarnished/internal/api"
 	"Path-of-the-Tarnished/internal/coregame"
 	"fmt"
 	"log"
 )
 
-func GetScaling(scalingDetails []api.ScaleDetail) map[string]rune {
-	var FormattedScalingDetails = make(map[string]rune)
-	var attr string
-	var scalefactor rune
-
-	for _, currentDetail := range scalingDetails {
-		attr = currentDetail.Name
-		scalefactor = rune(currentDetail.Scaling[0])
-
-		FormattedScalingDetails[attr] = scalefactor
-	}
-	return FormattedScalingDetails
+func GetMaxDamageThreeFactors(character *coregame.Character, weapon *coregame.Weapon, runesToUse uint16) float32 {
+	return 0
 }
 
-func GetFinalWeapon(weaponName string) *coregame.Weapon {
-	schemaWeapon := api.AllWeapons[weaponName]
-	schemaScaling := GetScaling(schemaWeapon.ScalesWith)
-	basePhyDamage := schemaWeapon.Attack[0].Amount
+// I DONT CARE ABOUT DAMAGE!
+func GetMaxDamageTwoFactors(character *coregame.Character, weapon *coregame.Weapon, runesToUse uint16) float32 {
+	var bothFactors []string
 
-	realBaseDamage := coregame.GetBaseDamage(basePhyDamage, 25)
-
-	weapon := coregame.Weapon{
-		Name:         weaponName,
-		ScalingAttrs: schemaScaling,
-		BaseDamage:   realBaseDamage,
+	for factor := range weapon.ScalingAttrs {
+		bothFactors = append(bothFactors, factor)
 	}
 
-	return &weapon
+	//setting one factor to max
+	firstFactor := bothFactors[0]
+	secondFactor := bothFactors[1]
+	character.AddToAttr(firstFactor, runesToUse)
+
+	maxDamage := coregame.CalculateDamage(character, weapon)
+
+	for range runesToUse {
+		character.AddToAttr(secondFactor, 1)
+		character.SubFromAttr(firstFactor, 1)
+
+		currentDamage := coregame.CalculateDamage(character, weapon)
+
+		maxDamage = max(maxDamage, currentDamage)
+	}
+
+	return maxDamage
 }
 
 func GetOptimizedStats(weaponName string, className string, runeLvl uint16) (coregame.Attributes, error) {
-	weapon := GetFinalWeapon(weaponName)
+	weapon := coregame.GetFinalWeapon(weaponName)
 
 	fmt.Println("weapon name:", weapon.Name)
 	fmt.Println("scaling attrs:", weapon.ScalingAttrs)
