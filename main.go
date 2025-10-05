@@ -1,13 +1,14 @@
 package main
 
 import (
-	"Path-of-the-Tarnished/internal/api"
-	"Path-of-the-Tarnished/internal/coregame"
-	"Path-of-the-Tarnished/internal/optimizer"
 	"bufio"
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/mannyjimen/Path-of-the-Tarnished/api"
+	"github.com/mannyjimen/Path-of-the-Tarnished/coregame"
+	"github.com/mannyjimen/Path-of-the-Tarnished/optimizer"
 )
 
 func PrintStats(attrs coregame.Attributes) {

@@ -1,6 +1,6 @@
 package coregame
 
-import "Path-of-the-Tarnished/internal/api"
+import "github.com/mannyjimen/Path-of-the-Tarnished/api"
 
 func getScaling(scalingDetails []api.ScaleDetail) map[string]float32 {
 	var FormattedScalingDetails = make(map[string]float32)

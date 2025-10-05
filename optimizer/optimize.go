@@ -1,9 +1,10 @@
 package optimizer
 
 import (
-	"Path-of-the-Tarnished/internal/coregame"
 	"fmt"
 	"log"
+
+	"github.com/mannyjimen/Path-of-the-Tarnished/coregame"
 )
 
 func GetMaxDamageThreeFactors(character *coregame.Character, weapon *coregame.Weapon, runesToUse uint16) float32 {
