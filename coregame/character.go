@@ -76,14 +76,90 @@ var baseClassType = map[string]Class{
 	"Samurai":    Samurai,
 }
 
-// first method (pointer receiver too!)
-func (character *Character) SetAttr(attr string, attrLevel uint16) {
-}
-
+// first method (pointer receiver)
 func (character *Character) AddToAttr(attr string, levelsToAdd uint16) {
+	switch attr {
+	case "Vgr":
+		character.Attrs.Vgr += levelsToAdd
+	case "Mnd":
+		character.Attrs.Mnd += levelsToAdd
+	case "End":
+		character.Attrs.End += levelsToAdd
+	case "Str":
+		character.Attrs.Str += levelsToAdd
+	case "Dex":
+		character.Attrs.Dex += levelsToAdd
+	case "Int":
+		character.Attrs.Int += levelsToAdd
+	case "Fth":
+		character.Attrs.Fth += levelsToAdd
+	case "Arc":
+		character.Attrs.Arc += levelsToAdd
+	}
 }
 
-func (character *Character) SubFromAttr(attr string, levelsToAdd uint16) {
+func (character *Character) SubFromAttr(attr string, levelsToSub uint16) {
+	switch attr {
+	case "Vgr":
+		character.Attrs.Vgr -= levelsToSub
+	case "Mnd":
+		character.Attrs.Mnd -= levelsToSub
+	case "End":
+		character.Attrs.End -= levelsToSub
+	case "Str":
+		character.Attrs.Str -= levelsToSub
+	case "Dex":
+		character.Attrs.Dex -= levelsToSub
+	case "Int":
+		character.Attrs.Int -= levelsToSub
+	case "Fth":
+		character.Attrs.Fth -= levelsToSub
+	case "Arc":
+		character.Attrs.Arc -= levelsToSub
+	}
+}
+
+func (character *Character) SetAttr(attr string, runeLevel uint16) {
+	switch attr {
+	case "Vgr":
+		character.Attrs.Vgr = runeLevel
+	case "Mnd":
+		character.Attrs.Mnd = runeLevel
+	case "End":
+		character.Attrs.End = runeLevel
+	case "Str":
+		character.Attrs.Str = runeLevel
+	case "Dex":
+		character.Attrs.Dex = runeLevel
+	case "Int":
+		character.Attrs.Int = runeLevel
+	case "Fth":
+		character.Attrs.Fth = runeLevel
+	case "Arc":
+		character.Attrs.Arc = runeLevel
+	}
+}
+
+func (character Character) GetAttr(attr string) uint16 {
+	switch attr {
+	case "Vgr":
+		return character.Attrs.Vgr
+	case "Mnd":
+		return character.Attrs.Mnd
+	case "End":
+		return character.Attrs.End
+	case "Str":
+		return character.Attrs.Str
+	case "Dex":
+		return character.Attrs.Dex
+	case "Int":
+		return character.Attrs.Int
+	case "Fth":
+		return character.Attrs.Fth
+	case "Arc":
+		return character.Attrs.Arc
+	}
+	return 0
 }
 
 // constructor function (using error!)

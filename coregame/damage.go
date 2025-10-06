@@ -1,6 +1,9 @@
 package coregame
 
-func CalculateDamage(c *Character, w *Weapon) float32 {
+import "math/rand/v2"
+
+func CalculateDamage(attrs *Attributes, weapon *Weapon) float32 {
 	//using current character attributes and current weapon, calc damage output
-	return 0
+	test_num := rand.IntN(1000)
+	return float32(test_num)
 }

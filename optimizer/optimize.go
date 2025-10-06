@@ -7,12 +7,46 @@ import (
 	"github.com/mannyjimen/Path-of-the-Tarnished/coregame"
 )
 
-func GetMaxDamageThreeFactors(character *coregame.Character, weapon *coregame.Weapon, runesToUse uint16) float32 {
-	return 0
+/*
+
+for every range of the first factor (runesToUse -> 0) i will delete this factor from character, and send to GetMaxTwoFactors
+where my runes to use is runesToUse - currentRangeValue for first factor.
+
+*/
+
+func GetMaxDamageThreeFactors(character *coregame.Character, weapon *coregame.Weapon, runesToUse uint16) coregame.Attributes {
+	var firstFactor string
+	for factor := range weapon.ScalingAttrs {
+		firstFactor = factor
+		break
+	}
+	delete(weapon.ScalingAttrs, firstFactor)
+
+	character.AddToAttr(firstFactor, runesToUse)
+	initialFirstAttr := character.GetAttr(firstFactor)
+
+	var maxDamage float32
+	var tempDamage float32
+	var currentOptimalAttrs coregame.Attributes
+	var tempAttrs coregame.Attributes
+
+	for i := 0; i <= int(runesToUse); i++ {
+		character.SetAttr(firstFactor, initialFirstAttr-uint16(i))
+		tempAttrs = GetMaxDamageTwoFactors(character, weapon, uint16(i))
+
+		fmt.Print(firstFactor, ":", character.GetAttr(firstFactor))
+
+		copyCharacter := *character
+		if tempDamage = coregame.CalculateDamage(&copyCharacter.Attrs, weapon); tempDamage > maxDamage {
+			maxDamage = tempDamage
+			currentOptimalAttrs = tempAttrs
+		}
+	}
+
+	return currentOptimalAttrs
 }
 
-// I DONT CARE ABOUT DAMAGE!
-func GetMaxDamageTwoFactors(character *coregame.Character, weapon *coregame.Weapon, runesToUse uint16) float32 {
+func GetMaxDamageTwoFactors(character *coregame.Character, weapon *coregame.Weapon, runesToUse uint16) coregame.Attributes {
 	var bothFactors []string
 
 	for factor := range weapon.ScalingAttrs {
@@ -22,28 +56,32 @@ func GetMaxDamageTwoFactors(character *coregame.Character, weapon *coregame.Weap
 	//setting one factor to max
 	firstFactor := bothFactors[0]
 	secondFactor := bothFactors[1]
+
 	character.AddToAttr(firstFactor, runesToUse)
+	initialFirstAttr := character.GetAttr(firstFactor)
+	initialSecondFactor := character.GetAttr(secondFactor)
 
-	maxDamage := coregame.CalculateDamage(character, weapon)
+	var maxDamage float32
+	var currentDamage float32
+	var currentOptimalAttrs coregame.Attributes
 
-	for range runesToUse {
-		character.AddToAttr(secondFactor, 1)
-		character.SubFromAttr(firstFactor, 1)
+	for i := 0; i <= int(runesToUse); i++ {
+		character.SetAttr(firstFactor, initialFirstAttr-uint16(i))
+		character.SetAttr(secondFactor, initialSecondFactor+uint16(i))
 
-		currentDamage := coregame.CalculateDamage(character, weapon)
+		fmt.Println(firstFactor, ":", character.GetAttr(firstFactor), secondFactor, ":", character.GetAttr(secondFactor))
 
-		maxDamage = max(maxDamage, currentDamage)
+		if currentDamage = coregame.CalculateDamage(&character.Attrs, weapon); currentDamage > maxDamage {
+			maxDamage = currentDamage
+			currentOptimalAttrs = character.Attrs
+		}
 	}
 
-	return maxDamage
+	return currentOptimalAttrs
 }
 
 func GetOptimizedStats(weaponName string, className string, runeLvl uint16) (coregame.Attributes, error) {
 	weapon := coregame.GetFinalWeapon(weaponName)
-
-	fmt.Println("weapon name:", weapon.Name)
-	fmt.Println("scaling attrs:", weapon.ScalingAttrs)
-	fmt.Println("base damage:", weapon.BaseDamage)
 
 	character, err := coregame.NewCharacter(className)
 
@@ -51,8 +89,17 @@ func GetOptimizedStats(weaponName string, className string, runeLvl uint16) (cor
 		log.Fatalf("couldn't create character: %v", err)
 	}
 
-	// runesToUse := runeLvl - character.RuneLvl
-	// will do optimized brute force loop here
+	runesToUse := runeLvl - character.RuneLvl
 
-	return character.Attrs, nil
+	var optimalAttrs coregame.Attributes
+	numScalingAttrs := len(weapon.ScalingAttrs)
+
+	switch numScalingAttrs {
+	case 2:
+		optimalAttrs = GetMaxDamageTwoFactors(character, weapon, runesToUse)
+	case 3:
+		optimalAttrs = GetMaxDamageThreeFactors(character, weapon, runesToUse)
+	}
+
+	return optimalAttrs, nil
 }
