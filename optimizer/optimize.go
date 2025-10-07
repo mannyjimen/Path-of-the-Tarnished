@@ -35,7 +35,7 @@ func GetMaxDamageThreeFactors(character *coregame.Character, weapon *coregame.We
 		copyCharacter := *character
 		tempAttrs = GetMaxDamageTwoFactors(&copyCharacter, weapon, uint16(i))
 
-		if tempDamage = coregame.CalculateDamage(&copyCharacter.Attrs, weapon); tempDamage > maxDamage {
+		if tempDamage = coregame.CalculateDamage(&copyCharacter, weapon); tempDamage > maxDamage {
 			maxDamage = tempDamage
 			currentOptimalAttrs = tempAttrs
 		}
@@ -67,7 +67,7 @@ func GetMaxDamageTwoFactors(character *coregame.Character, weapon *coregame.Weap
 		character.SetAttr(firstFactor, initialFirstAttr-uint16(i))
 		character.SetAttr(secondFactor, initialSecondFactor+uint16(i))
 
-		if currentDamage = coregame.CalculateDamage(&character.Attrs, weapon); currentDamage > maxDamage {
+		if currentDamage = coregame.CalculateDamage(character, weapon); currentDamage > maxDamage {
 			maxDamage = currentDamage
 			currentOptimalAttrs = character.Attrs
 		}

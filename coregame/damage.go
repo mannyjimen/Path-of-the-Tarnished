@@ -1,9 +1,22 @@
 package coregame
 
-import "math/rand/v2"
+//total attack rating = base dmg + bonus dmg
+//attr spec bonus dmg = base dmg * attr scaling * attr bonus ratio
 
-func CalculateDamage(attrs *Attributes, weapon *Weapon) float32 {
+func CalculateDamage(character *Character, weapon *Weapon) float32 {
 	//using current character attributes and current weapon, calc damage output
-	test_num := rand.IntN(1000)
-	return float32(test_num)
+	baseDamage := weapon.BaseDamage
+	var totalBonusDamage float32
+	for attrStr, letterRatio := range weapon.ScalingAttrs {
+		attrLevel := character.GetAttr(attrStr)
+		attrBonus := GetAttrBonusRatio(attrLevel)
+		attrSpecBonusDamage := baseDamage * letterRatio * attrBonus
+		// fmt.Println("bonus from", attrStr, "with level", attrLevel, "of scaling bonus", attrBonus, "is", attrSpecBonusDamage)
+
+		totalBonusDamage += attrSpecBonusDamage
+	}
+	// fmt.Println("--------------------------------")
+
+	totalAttackRating := weapon.BaseDamage + totalBonusDamage
+	return totalAttackRating
 }
