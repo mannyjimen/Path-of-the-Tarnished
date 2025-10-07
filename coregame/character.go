@@ -91,31 +91,10 @@ func (character *Character) AddToAttr(attr string, levelsToAdd uint16) {
 		character.Attrs.Dex += levelsToAdd
 	case "Int":
 		character.Attrs.Int += levelsToAdd
-	case "Fth":
+	case "Fai":
 		character.Attrs.Fth += levelsToAdd
 	case "Arc":
 		character.Attrs.Arc += levelsToAdd
-	}
-}
-
-func (character *Character) SubFromAttr(attr string, levelsToSub uint16) {
-	switch attr {
-	case "Vgr":
-		character.Attrs.Vgr -= levelsToSub
-	case "Mnd":
-		character.Attrs.Mnd -= levelsToSub
-	case "End":
-		character.Attrs.End -= levelsToSub
-	case "Str":
-		character.Attrs.Str -= levelsToSub
-	case "Dex":
-		character.Attrs.Dex -= levelsToSub
-	case "Int":
-		character.Attrs.Int -= levelsToSub
-	case "Fth":
-		character.Attrs.Fth -= levelsToSub
-	case "Arc":
-		character.Attrs.Arc -= levelsToSub
 	}
 }
 
@@ -133,7 +112,7 @@ func (character *Character) SetAttr(attr string, runeLevel uint16) {
 		character.Attrs.Dex = runeLevel
 	case "Int":
 		character.Attrs.Int = runeLevel
-	case "Fth":
+	case "Fai":
 		character.Attrs.Fth = runeLevel
 	case "Arc":
 		character.Attrs.Arc = runeLevel
@@ -154,7 +133,7 @@ func (character Character) GetAttr(attr string) uint16 {
 		return character.Attrs.Dex
 	case "Int":
 		return character.Attrs.Int
-	case "Fth":
+	case "Fai":
 		return character.Attrs.Fth
 	case "Arc":
 		return character.Attrs.Arc

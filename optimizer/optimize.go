@@ -1,7 +1,6 @@
 package optimizer
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/mannyjimen/Path-of-the-Tarnished/coregame"
@@ -32,11 +31,10 @@ func GetMaxDamageThreeFactors(character *coregame.Character, weapon *coregame.We
 
 	for i := 0; i <= int(runesToUse); i++ {
 		character.SetAttr(firstFactor, initialFirstAttr-uint16(i))
-		tempAttrs = GetMaxDamageTwoFactors(character, weapon, uint16(i))
-
-		fmt.Print(firstFactor, ":", character.GetAttr(firstFactor))
 
 		copyCharacter := *character
+		tempAttrs = GetMaxDamageTwoFactors(&copyCharacter, weapon, uint16(i))
+
 		if tempDamage = coregame.CalculateDamage(&copyCharacter.Attrs, weapon); tempDamage > maxDamage {
 			maxDamage = tempDamage
 			currentOptimalAttrs = tempAttrs
@@ -68,8 +66,6 @@ func GetMaxDamageTwoFactors(character *coregame.Character, weapon *coregame.Weap
 	for i := 0; i <= int(runesToUse); i++ {
 		character.SetAttr(firstFactor, initialFirstAttr-uint16(i))
 		character.SetAttr(secondFactor, initialSecondFactor+uint16(i))
-
-		fmt.Println(firstFactor, ":", character.GetAttr(firstFactor), secondFactor, ":", character.GetAttr(secondFactor))
 
 		if currentDamage = coregame.CalculateDamage(&character.Attrs, weapon); currentDamage > maxDamage {
 			maxDamage = currentDamage
