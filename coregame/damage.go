@@ -13,11 +13,9 @@ func CalculateDamage(character *Character, weapon *Weapon) float32 {
 		attrLevel := character.GetAttr(attrStr)
 		attrBonus := GetAttrBonusRatio(attrLevel)
 		attrSpecBonusDamage := baseDamage * letterRatio * attrBonus
-		// fmt.Println("bonus from", attrStr, "with level", attrLevel, "of scaling bonus", attrBonus, "is", attrSpecBonusDamage)
 
 		totalBonusDamage += attrSpecBonusDamage
 	}
-	// fmt.Println("--------------------------------")
 
 	totalAttackRating := weapon.BaseDamage + totalBonusDamage
 	return totalAttackRating
