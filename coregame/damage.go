@@ -7,7 +7,9 @@ func CalculateDamage(character *Character, weapon *Weapon) float32 {
 	//using current character attributes and current weapon, calc damage output
 	baseDamage := weapon.BaseDamage
 	var totalBonusDamage float32
-	for attrStr, letterRatio := range weapon.ScalingAttrs {
+	for _, currScalePair := range weapon.ScalingAttrs {
+		attrStr := currScalePair.ScaleAttr
+		letterRatio := currScalePair.ScaleRatio
 		attrLevel := character.GetAttr(attrStr)
 		attrBonus := GetAttrBonusRatio(attrLevel)
 		attrSpecBonusDamage := baseDamage * letterRatio * attrBonus

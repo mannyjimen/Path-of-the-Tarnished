@@ -14,12 +14,9 @@ where my runes to use is runesToUse - currentRangeValue for first factor.
 */
 
 func GetMaxDamageThreeFactors(character *coregame.Character, weapon *coregame.Weapon, runesToUse uint16) coregame.Attributes {
-	var firstFactor string
-	for factor := range weapon.ScalingAttrs {
-		firstFactor = factor
-		break
-	}
-	delete(weapon.ScalingAttrs, firstFactor)
+	allFactors := weapon.ScalingAttrs
+
+	firstFactor := allFactors[0].ScaleAttr
 
 	character.AddToAttr(firstFactor, runesToUse)
 	initialFirstAttr := character.GetAttr(firstFactor)
@@ -33,7 +30,8 @@ func GetMaxDamageThreeFactors(character *coregame.Character, weapon *coregame.We
 		character.SetAttr(firstFactor, initialFirstAttr-uint16(i))
 
 		copyCharacter := *character
-		tempAttrs = GetMaxDamageTwoFactors(&copyCharacter, weapon, uint16(i))
+
+		tempAttrs = GetMaxDamageTwoFactors(&copyCharacter, weapon, uint16(i), true)
 
 		if tempDamage = coregame.CalculateDamage(&copyCharacter, weapon); tempDamage > maxDamage {
 			maxDamage = tempDamage
@@ -44,16 +42,18 @@ func GetMaxDamageThreeFactors(character *coregame.Character, weapon *coregame.We
 	return currentOptimalAttrs
 }
 
-func GetMaxDamageTwoFactors(character *coregame.Character, weapon *coregame.Weapon, runesToUse uint16) coregame.Attributes {
-	var bothFactors []string
+func GetMaxDamageTwoFactors(character *coregame.Character, weapon *coregame.Weapon, runesToUse uint16, fromThree bool) coregame.Attributes {
 
-	for factor := range weapon.ScalingAttrs {
-		bothFactors = append(bothFactors, factor)
+	allFactors := weapon.ScalingAttrs
+
+	var firstFactor, secondFactor string
+	if fromThree {
+		firstFactor = allFactors[1].ScaleAttr
+		secondFactor = allFactors[2].ScaleAttr
+	} else {
+		firstFactor = allFactors[0].ScaleAttr
+		secondFactor = allFactors[1].ScaleAttr
 	}
-
-	//setting one factor to max
-	firstFactor := bothFactors[0]
-	secondFactor := bothFactors[1]
 
 	character.AddToAttr(firstFactor, runesToUse)
 	initialFirstAttr := character.GetAttr(firstFactor)
@@ -66,6 +66,8 @@ func GetMaxDamageTwoFactors(character *coregame.Character, weapon *coregame.Weap
 	for i := 0; i <= int(runesToUse); i++ {
 		character.SetAttr(firstFactor, initialFirstAttr-uint16(i))
 		character.SetAttr(secondFactor, initialSecondFactor+uint16(i))
+
+		// fmt.Println(allFactors[0].ScaleAttr, ":", character.GetAttr(allFactors[0].ScaleAttr), allFactors[1].ScaleAttr, ":", character.GetAttr(allFactors[1].ScaleAttr), allFactors[2].ScaleAttr, ":", character.GetAttr(allFactors[2].ScaleAttr))
 
 		if currentDamage = coregame.CalculateDamage(character, weapon); currentDamage > maxDamage {
 			maxDamage = currentDamage
@@ -92,7 +94,7 @@ func GetOptimizedStats(weaponName string, className string, runeLvl uint16) (cor
 
 	switch numScalingAttrs {
 	case 2:
-		optimalAttrs = GetMaxDamageTwoFactors(character, weapon, runesToUse)
+		optimalAttrs = GetMaxDamageTwoFactors(character, weapon, runesToUse, false)
 	case 3:
 		optimalAttrs = GetMaxDamageThreeFactors(character, weapon, runesToUse)
 	}

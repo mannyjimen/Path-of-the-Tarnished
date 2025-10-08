@@ -2,8 +2,8 @@ package coregame
 
 import "github.com/mannyjimen/Path-of-the-Tarnished/api"
 
-func getScaling(scalingDetails []api.ScaleDetail) map[string]float32 {
-	var FormattedScalingDetails = make(map[string]float32)
+func getScaling(scalingDetails []api.ScaleDetail) []scalePair {
+	var FormattedScalingDetails []scalePair
 	var attr string
 	var scaleFactorLetter byte
 	var scaleFactorRatio float32
@@ -12,8 +12,12 @@ func getScaling(scalingDetails []api.ScaleDetail) map[string]float32 {
 		attr = currentDetail.Name
 		scaleFactorLetter = currentDetail.Scaling[0]
 		scaleFactorRatio = scalingRatio[scaleFactorLetter]
+		scalePairEntry := scalePair{
+			ScaleAttr:  attr,
+			ScaleRatio: scaleFactorRatio,
+		}
 
-		FormattedScalingDetails[attr] = scaleFactorRatio
+		FormattedScalingDetails = append(FormattedScalingDetails, scalePairEntry)
 	}
 	return FormattedScalingDetails
 }
@@ -34,8 +38,13 @@ func GetFinalWeapon(weaponName string) *Weapon {
 	return &weapon
 }
 
+type scalePair struct {
+	ScaleAttr  string
+	ScaleRatio float32
+}
+
 type Weapon struct {
 	Name         string
-	ScalingAttrs map[string]float32
+	ScalingAttrs []scalePair
 	BaseDamage   float32
 }
