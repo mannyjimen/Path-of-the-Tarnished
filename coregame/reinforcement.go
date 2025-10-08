@@ -19,8 +19,8 @@ func GetBaseDamage(zeroDamage float32, reinforcedLevel int) float32 {
 	return float32(zeroDamage) * normalWeaponRatio[reinforcedLevel]
 }
 
-//99 is max level for attr
-//assuming soft caps are 20, 55, 80
+// 99 is max level for attr
+// assuming soft caps are 20, 55, 80
 // level > 80 = 0.10 effective per level addition
 // 80 >= level > 55 = 0.40 effective per level addition
 // 55 >= level > 20 = 0.75 effective per level addition

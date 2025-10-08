@@ -30,10 +30,8 @@ func GetMaxDamageThreeFactors(character *coregame.Character, weapon *coregame.We
 		character.SetAttr(firstFactor, initialFirstAttr-uint16(i))
 
 		copyCharacter := *character
-		tempAttrs = GetMaxDamageTwoFactors(&copyCharacter, weapon, uint16(i), true)
-
+		tempAttrs, tempDamage = GetMaxDamageTwoFactors(&copyCharacter, weapon, uint16(i), true)
 		copyCharacter.Attrs = tempAttrs
-		tempDamage = coregame.CalculateDamage(&copyCharacter, weapon)
 
 		if tempDamage > maxDamage {
 			maxDamage = tempDamage
@@ -44,7 +42,7 @@ func GetMaxDamageThreeFactors(character *coregame.Character, weapon *coregame.We
 	return currentOptimalAttrs
 }
 
-func GetMaxDamageTwoFactors(character *coregame.Character, weapon *coregame.Weapon, runesToUse uint16, fromThree bool) coregame.Attributes {
+func GetMaxDamageTwoFactors(character *coregame.Character, weapon *coregame.Weapon, runesToUse uint16, fromThree bool) (coregame.Attributes, float32) {
 
 	allFactors := weapon.ScalingAttrs
 
@@ -77,7 +75,7 @@ func GetMaxDamageTwoFactors(character *coregame.Character, weapon *coregame.Weap
 		}
 	}
 
-	return currentOptimalAttrs
+	return currentOptimalAttrs, maxDamage
 }
 
 func GetOptimizedStats(weaponName string, className string, runeLvl uint16) (coregame.Attributes, error) {
@@ -96,7 +94,7 @@ func GetOptimizedStats(weaponName string, className string, runeLvl uint16) (cor
 
 	switch numScalingAttrs {
 	case 2:
-		optimalAttrs = GetMaxDamageTwoFactors(character, weapon, runesToUse, false)
+		optimalAttrs, _ = GetMaxDamageTwoFactors(character, weapon, runesToUse, false)
 	case 3:
 		optimalAttrs = GetMaxDamageThreeFactors(character, weapon, runesToUse)
 	}
